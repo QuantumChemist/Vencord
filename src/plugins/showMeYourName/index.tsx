@@ -65,17 +65,21 @@ export default definePlugin({
             if (settings.store.displayNames)
                 username = user.globalName || username;
 
+            // Support for customized friend nickname
+            // If user.friendNickname exists, use it as the preferred nickname
+            const friendNickname = (user as any).friendNickname as string | undefined;
             const { nick } = author;
+            const displayNick = friendNickname || nick;
             const prefix = withMentionPrefix ? "@" : "";
 
-            if (isRepliedMessage && !settings.store.inReplies || username.toLowerCase() === nick.toLowerCase())
-                return <>{prefix}{nick}</>;
+            if (isRepliedMessage && !settings.store.inReplies || username.toLowerCase() === displayNick.toLowerCase())
+                return <>{prefix}{displayNick}</>;
 
             if (settings.store.mode === "user-nick")
-                return <>{prefix}{username} <span className="vc-smyn-suffix">{nick}</span></>;
+                return <>{prefix}{username} <span className="vc-smyn-suffix">{displayNick}</span></>;
 
             if (settings.store.mode === "nick-user")
-                return <>{prefix}{nick} <span className="vc-smyn-suffix">{username}</span></>;
+                return <>{prefix}{displayNick} <span className="vc-smyn-suffix">{username}</span></>;
 
             return <>{prefix}{username}</>;
         } catch {
