@@ -61,6 +61,7 @@ export default definePlugin({
     renderUsername: ErrorBoundary.wrap(({ author, message, isRepliedMessage, withMentionPrefix, userOverride }: UsernameProps) => {
         try {
             const user = userOverride ?? message.author;
+            console.log("User attributes:", Object.getOwnPropertyNames(user), user);
             let { username } = user;
             if (settings.store.displayNames)
                 username = user.globalName || username;
